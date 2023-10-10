@@ -1,17 +1,28 @@
 //imports dependencias, imagenes, componentes, stylos
+import {useState} from "react";
 
 function App() {
   //funciones, variables, handles,
-  let [numberOfErrors, setNumberOfErrors] = "";
-  numberOfErrors = 0;
-const handleClick = (event) => {
-   setNumberOfErrors (numberOfErrors + 1);
+  let [numberOfErrors, setNumberOfErrors] = useState(0);
+
+const incrementNumber = () => {
+  setNumberOfErrors(numberOfErrors +1);
+  console.log(numberOfErrors);
+}
+
+let [lastLetter, setLastLetter] = useState('');
+const handleInputChange = (ev) => {
+  setLastLetter (ev.target.value)
+  const inputText = ev.target.value;
+  const validInput = inputText.replace(/[^a-zA-Z-ZáéíóúüñÁÉÍÓÚÜÑ]/g, "");
+
+  setLastLetter(validInput);
 }
 
   //html
   return (
     <>
-    <button onClick={handleClick}>Incrementar</button>
+    <button onClick={incrementNumber}>Incrementar</button>
       <div className="page">
         <header>
           <h1 className="header__title">Juego del ahorcado</h1>
@@ -54,10 +65,12 @@ const handleClick = (event) => {
                 type="text"
                 name="last-letter"
                 id="last-letter"
+                onChange={handleInputChange}
+                value={lastLetter}
               />
             </form>
           </section>
-          <section className="dummy error-5">
+          <section className={`dummy error-${numberOfErrors}`}>
             <span className="error-13 eye"></span>
             <span className="error-12 eye"></span>
             <span className="error-11 line"></span>
