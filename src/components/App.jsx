@@ -5,19 +5,31 @@ function App() {
   //funciones, variables, handles,
   let [numberOfErrors, setNumberOfErrors] = useState(0);
 
-const incrementNumber = () => {
+  const incrementNumber = () => {
   setNumberOfErrors(numberOfErrors +1);
   console.log(numberOfErrors);
-}
-
-let [lastLetter, setLastLetter] = useState('');
-const handleInputChange = (ev) => {
+  }
+  let [userLetters, setUserLetters] = useState([]);
+  let [lastLetter, setLastLetter] = useState('');
+  const handleInputChange = (ev) => {
   setLastLetter (ev.target.value)
   const inputText = ev.target.value;
   const validInput = inputText.replace(/[^a-zA-Z-ZáéíóúüñÁÉÍÓÚÜÑ]/g, "");
+    setLastLetter(validInput);
+    setUserLetters(validInput);
+  } 
 
-  setLastLetter(validInput);
-}
+  let [word, setWord] = useState('katakroker');
+
+
+  const renderSolutionLetters = () => {
+    const wordLetters = word.split('');
+    return wordLetters.map((item, index) => (
+        <li className="letter" key={index}>{item.word}</li>
+    ));
+};
+ 
+
 
   //html
   return (
@@ -30,9 +42,9 @@ const handleInputChange = (ev) => {
         <main className="main">
           <section>
             <div className="solution">
-              <h2 className="title">Solución:</h2>
-              <ul className="letters">
-                <li className="letter">k</li>
+              <h2 className="title">Solución:</h2> 
+              <ul className="letters">{renderSolutionLetters()}
+              {/* <li className="letter">k</li>
                 <li className="letter">a</li>
                 <li className="letter"></li>
                 <li className="letter">a</li>
@@ -41,7 +53,7 @@ const handleInputChange = (ev) => {
                 <li className="letter"></li>
                 <li className="letter">k</li>
                 <li className="letter">e</li>
-                <li className="letter">r</li>
+                <li className="letter">r</li>*/}
               </ul>
             </div>
             <div className="error">
@@ -90,5 +102,4 @@ const handleInputChange = (ev) => {
     </>
   );
 }
-
 export default App;
