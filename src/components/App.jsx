@@ -3,33 +3,50 @@ import {useState} from "react";
 
 function App() {
   //funciones, variables, handles,
-  let [numberOfErrors, setNumberOfErrors] = useState(0);
 
-  const incrementNumber = () => {
-  setNumberOfErrors(numberOfErrors +1);
-  console.log(numberOfErrors);
-  }
   let [userLetters, setUserLetters] = useState([]);
   let [lastLetter, setLastLetter] = useState('');
+  let [numberOfErrors, setNumberOfErrors] = useState(0);
+  let [word, setWord] = useState('katakroker');
+
   const handleInputChange = (ev) => {
-  setLastLetter (ev.target.value)
   const inputText = ev.target.value;
   const validInput = inputText.replace(/[^a-zA-Z-ZáéíóúüñÁÉÍÓÚÜÑ]/g, "");
     setLastLetter(validInput);
-    setUserLetters(validInput);
+    setUserLetters(validInput.split(''));
+    setNumberOfErrors(validInput.split('').filter((letter) => !word.includes(letter)).length);
   } 
-
-  let [word, setWord] = useState('katakroker');
-
 
   const renderSolutionLetters = () => {
     const wordLetters = word.split('');
-    return wordLetters.map((item, index) => (
-        <li className="letter" key={index}>{item.word}</li>
-    ));
-};
- 
+    return (
+      <ul className="letters">
+        {wordLetters.map((letter, index) => {
+          if (userLetters.includes(letter)) {
+            return <li className="letter" key={index}>{letter}</li>;
+          } else {
+            return <li className="letter" key={index}></li>;
+          }
+        }
+        )}
+      </ul>
+    )};
+      
+    const renderErrorLetters = () =>{
+      const incorrectLetter = lastLetter.split('').filter(letter => !word.includes(letter));
+      return (
+        <ul className="letters">
+          {incorrectLetter.map((letter, index) =>
+          <li className="letter" key={index}>{letter}</li>
+          )}
+        </ul>
+      )
+    };
 
+      const incrementNumber = () => {
+      setNumberOfErrors(numberOfErrors +1);
+      console.log(numberOfErrors);
+      }
 
   //html
   return (
@@ -42,29 +59,12 @@ function App() {
         <main className="main">
           <section>
             <div className="solution">
-              <h2 className="title">Solución:</h2> 
-              <ul className="letters">{renderSolutionLetters()}
-              {/* <li className="letter">k</li>
-                <li className="letter">a</li>
-                <li className="letter"></li>
-                <li className="letter">a</li>
-                <li className="letter">k</li>
-                <li className="letter">r</li>
-                <li className="letter"></li>
-                <li className="letter">k</li>
-                <li className="letter">e</li>
-                <li className="letter">r</li>*/}
-              </ul>
+              <h2 className="title">Solución:</h2>
+              {renderSolutionLetters()} 
             </div>
             <div className="error">
               <h2 className="title">Letras falladas:</h2>
-              <ul className="letters">
-                <li className="letter">f</li>
-                <li className="letter">q</li>
-                <li className="letter">h</li>
-                <li className="letter">p</li>
-                <li className="letter">x</li>
-              </ul>
+              {renderErrorLetters()}
             </div>
             <form className="form">
               <label className="title" htmlFor="last-letter">
